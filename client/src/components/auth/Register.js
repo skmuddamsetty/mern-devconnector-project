@@ -1,8 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setAlert } from '../../actions/alert';
+import PropTypes from 'prop-types';
+
 // import axios from 'axios';
 
-const Register = () => {
+const Register = ({ setAlert }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,7 +22,7 @@ const Register = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
-      console.log('passwords do not match');
+      setAlert('Passwords do not match', 'danger');
     } else {
       // Sample of how to make http request using axios inside component
       // const newUser = { name, email, password, password2 };
@@ -101,4 +105,13 @@ const Register = () => {
   );
 };
 
-export default Register;
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setAlert: (msg, alertType) => dispatch(setAlert(msg, alertType)),
+  };
+};
+export default connect(undefined, mapDispatchToProps)(Register);
